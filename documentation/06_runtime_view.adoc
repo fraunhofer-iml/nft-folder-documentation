@@ -1,0 +1,76 @@
+[[section-runtime-view]]
+== Runtime View
+
+In contrast to the static building block view, this section visualizes dynamic aspects of an XXX.
+The runtime view describes concrete behavior and interactions of the system’s building blocks across the architecture, i.e., how instances of building blocks of an XXX perform their job and communicate at runtime.
+Important usage scenarios with architectural relevance are e.g. interactions at critical external interfaces, operation and administration (launch, start-up, stop), and error and exception scenarios.
+
+=== General Component Communication
+
+All inter component communication in the XXX relies on passing JSON messages either via AMQP and the RabbitMQ broker or via accessing a MongoDB database.
+For long-term storage all device messages sent to the broker are persisted in the database by the MongoDB Connector.
+To achieve a common understanding of all XXX components, specific communication schemes must be adhered to so that:
+
+Device messages are reliably persisted in the database without the necessity to configure the mongodb-connector for specific adapters or connectors Data can be retrieved or (in case of a broker connection) can be subscribed to across device type boundaries Devices can be identified uniquely although their specific identifiers may be unique within their domain (e.g. an ID may only be unique for this specific type of device) No information loss on saving messages to database, especially concerning the origin of the message
+
+This common communication scheme is a key motivation for the SDK which is intended to be the canonical implementation of high level access functions which enforce those.
+
+A description of key elements of this communication scheme is described in the following chapters.
+
+==== AMQP-related schemes and definitions
+
+All messages sent by ... are forwarded to a specific AMQP exchange.
+This is done by the ... implementations, ideally using the provided SDK functions.
+The name of this AMQP exchange is "remote".
+The routing key used to publish device messages via AMQP should match the following scheme: xxx.<source>.<tenant>.message
+
+In this scheme "source" describes the type of ... that retrieved the message from a device and "tenant" identifies the actual device the message was sent from (e.g. a device ID).
+XXX components can use the "remote" exchange and create and bind component-specific queues to it to receive messages.
+
+==== Database schemes and definitions
+
+All messages which are sent by devices and submitted to the AMQP broker are automatically picked up by the database-connector and persisted in the database.
+This is a non-consuming operation, i.e. the messages are still present for other XXX components to be picked up.
+The mongodb-connector specifically mirrors all messages sent to the "remote" exchange in the AMQP broker to the database.
+All mongodb-connector instances share a common queue "mongo-connector" which is configured to send each message reliably to only a single running instance of the mongodb-connector regardless of how many instances are running and connected.
+All messages are persisted in a dedicated database called "device-communication" in a single collection "messagesIn".
+
+The routing key scheme described in 6.1.1 provides a scheme to extend the data to persist with necessary metadata to adhere to the requirements so that the persisted message consists of:
+
+"source" - the type of adapter who retrieved this message from the device "tenant" - the unique (per one value of "source") identification of the device that sent the message "timestamp" - the time in UTC (ISO-8601) this message was saved into the database "message" - the actual payload message as submitted to the broker by the adapter instance
+
+Every XXX component is free to use the message database for retrieval of device messages.
+However, per convention only the connector places data there.
+The relevant functions are therefore not part of the SDK and instead implemented in the connector directly.
+The DBMS itself can further be used freely by other XXX components directly as long as they use dedicated databases for their purposes (e.g. managing a list of devices, storing device configuration data, etc.)
+
+Those are typically expected to be use-case or device specific.
+
+=== Use Case 1
+
+The following communication steps are executed throughout the XXX architecture when ...
+
+TODO UML Sequence Diagram
+
+[cols="3",options="header"]
+|===
+|ID
+|Step
+|Description
+
+|1
+|login
+|Login via Web UI
+
+|2
+|...
+|add description
+
+|Column 1, row 3
+|Column 2, row 3
+|Column 3, row 3
+|===
+
+=== Use Case 2
+
+...

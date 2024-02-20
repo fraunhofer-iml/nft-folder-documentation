@@ -1,0 +1,40 @@
+[[section-deployment-view]]
+== Deployment View
+
+Software does not run without hardware.
+This view describes the deployment of XXX.
+It describes the technical infrastructure used to execute XXX, with infrastructure elements like clouds, computing nodes, and net topologies as well as other infrastructure elements and the mapping/installation of compiled software building block instances to that infrastructure elements.
+
+=== General Deployment Decisions
+
+The XXX is part of an SE Platform Instance (i.e a K8s Cluster instance).
+In such an SE Platform Instance the following number of components may be deployed:
+
+*Components of an SE Platform*
+
+. One or more SE services → Project overview, and SE Reference Architecture
+. One or more IDS Connectors → IDS
+. One Logistics Broker → Logistics Broker
+. IoT Broker (optional) → IoT Broker
+. Blockchain Full-Node (optional) → Blockchain Broker
+
+*An SE platform is*
+
+. the environment of SE services
+. Location does not "matter" (e.g., enterprise IT environment, a cloud environment, ...)
+
+=== Deployment of the XXX
+
+The XXXs sub-components are deployed separately as containers into a Kubernetes cluster used as execution environment.
+Each sub component is configured via Kubernetes resources (i.e. YAML files) which are deployed alongside the sub component container.
+
+By design, those XXX sub-component deployments may be scaled to an arbitrary number of instances to increase performance as well as redundancy.
+However, true redundancy can only be gained if the underlying execution platform comprises multiple independent failure domains such as multiple machines, data centers or geographic locations and sub component deployments span multiple such failure domains.
+
+==== Component 1
+
+Deployed manually by operator ahead of other XXX sub-components Triple redundancy (no performance benefit, cannot be meaningfully scaled to more than four instances) MongoDB instances share state and replicate state changes to each other Unique access credentials are created during deployment and provided to other sub-components as Kubernetes resource inside the cluster Not accessible from outside the execution environment Uses large amounts of persistent storage (actual size may vary by use case) provided by the execution environment
+
+==== Component 2
+
+TODO ...

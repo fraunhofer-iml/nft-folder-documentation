@@ -1,0 +1,16 @@
+[[section-glossary]]
+== glossary
+
+We define the project-specific terms for the XXX, and additionally refer to the global _Glossary_ of the Silicon Economy.
+
+[cols="1e,2e",options="header"]
+|===
+|Term
+|Definition
+
+|<Term-1>
+|<definition-1>
+
+|<Term-2>
+|<definition-2>
+|===

@@ -1,0 +1,26 @@
+[[section-tutorial]]
+== Tutorial
+
+We describe the main usage scenarios of XXX.
+
+=== Installation
+
+The XXX is solely intended to be deployed to Kubernetes.
+
+A scripted deployment of each of its components is possible and extensively used by CI/CD for the OpenShift distribution of Kubernetes.
+The respective scripts are developed and maintained alongside the source code and are part of the same repositories.
+A special case is the MongoDB which is used extensively for a lot of Silicon Economy Projects and for which the deployment script is therefore developed alongside similar deployment scripts centrally in a dedicated source code repository by the PDO.
+
+A more detailed installation tutorial including deployment level component configuration is planned.
+
+=== Use Case 1
+
+TODO
+
+=== Use Case 2
+
+TODO
+
+=== Manual
+
+TODO

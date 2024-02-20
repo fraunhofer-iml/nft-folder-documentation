@@ -1,0 +1,297 @@
+[[section-building-block-view]]
+== Building Block View
+
+The building block view is a static and hierarchical decomposition of the system into building blocks and their relationships.
+It is a collection of black box and white box descriptions for all important components.
+Building blocks may be modules, components, subsystems, classes, interfaces, packages, libraries, frameworks, layers, partitions, tiers, functions, macros, operations, data structures, etc.).
+
+In blackbox view, only the interface of the component is visible, not its internals.
+However, for interface specifications including all method signatures and their descriptions we refer to the JavaDoc available on request, or to the OpenAPI documents.
+Only other kinds of interfaces are described here.
+This is a simplification of arc42 (which requires short description of interfaces), to avoid redundancy and inconsistencies, and to reduce documentation efforts.
+
+[Tip]
+====
+*Important for chapter 5*
+
+. Description of the overall structure:
+** Which components (e.g. frontend, backend, DBs, etc.)?
+** What are the responsibilities/tasks of the individual components?
+** How are these components connected?
+** External interfaces provided by the components.
+** Connections to/from external systems, if any.
+. Description of the individual components.
+** Structure of the components (via class diagram)
+*** Only include the "important/essential" classes and their relationships in the diagrams. (Contributes to clarity.)
+*** Detailed description of the classes via table.
+** Describe the data model of the component.
+*** Overview as class diagram.
+*** Description of data types via table.
+** For further information use the code documentation (e.g. Javadoc).
+** For non-self-developed components like DBs, only mention the used technology/tool incl. version and their task in your project.
+. Description of the individual classes
+** Task(s) only
+** Optional: Describe helpers or utility classes.
+** Details are already part of the code documentation (e.g. Javadoc).
+====
+
+=== Overview
+
+The NFT map is a tool that allows data to be written to a blockchain as non-fungible Tokens. These Tokens can be assigned to so-called Segments, which in turn can belong to Containers. This functionality is realized via smart contracts that are deployed on a quorum blockchain. A Blockchain Connector is used to utilize the functions of the smart contracts.
+
+The Blockchain Connector is a tool to access the Blockchain and execute transactions on the Smart Contracts of the NFT-Folder. It can be used as an interface for the NFT-Folder. It supports the creation of new Tokens and Segments and takes care of the assignment of Tokens to Segments. Every Blockchain Connector instance has a fixed Container.
+
+TODO Overview diagram with Actors/Stakeholders handling the XXX
+
+
+=== Whitebox Blockchain Connector - Level 1
+
+In level 1, the components of the NFT-Folder and their relationships are shown.
+
+TODO UML Component diagram or UML Class diagram
+
+There are the following components with its responsibilities:
+
+[cols="3",options="header"]
+|===
+|Name
+|Status
+|Responsibility / Description
+
+|Project-specific Blockchain Connector
+|Custom Development
+|Accesses the smart contracts of the NFT folder via the general blockchain connector. Implemented for every project that integrates the NFT map.
+
+|Blockchain Connector
+|Custom Development
+|Represent a general variant of the project-specific blockchain connectors. Encapsulates access to the smart contracts. Is used by the project-specific blockchain connectors to use the functionality of the smart contracts.
+
+|NFT-Folder Smart Contracts
+|Custom Development
+|Realizes the functionality required to store tokens on the blockchain.
+
+|Quorum Blockchain
+|Blockchain-Database
+|Stores information about tokens, segments and containers in a decentralized manner.
+|===
+
+For each NFT-Folder component we give a brief overview as a blackbox view.
+For more details see Level 2 (Whitebox views of the components).
+
+==== Project-specific Blockchain Connector (Blackbox)
+
+TODO
+
+==== Blockchain Connector (Blackbox)
+
+The Blockchain Connector consists of a web service that implements various functions.
+
+* Segment
+** Create Segment and store it
+** Read Segments from the Blockchain
+** Add a Token to a Segment
+** Remove a Token from a Segment
+* Token
+** Mint Token
+** Read Token
+** Return all Tokens of a Segment
+** Update a Token
+** Burn a Token
+
+The web service is build in NestJs and the communication is done via RESTful API, that uses JSON for data transfer.
+
+For more details, please refer to the corresponding service whitebox.
+
+==== NFT Folder Smart Contracts (Blackbox)
+
+The Smart Contracts of the NFT Folder implement the various functions required to store the data on the blockchain.
+
+* Container
+** Create Segment
+** Read Segments, that are associated with the Container
+* Segment
+** Add a Token to a Segment
+** Remove a Token from a Segment
+* Token
+** Mint Token
+** Read Token
+** Update a Token
+** Burn a Token
+* ERC721AdditionalInformation
+** Add additionalInformation to a Token
+** Read additionalInformation of a Token
+** Remove additionalInformation from a Token
+* ERC721Asset
+** Set Asset URI and Asset Hash of a Token
+** Read Asset URI and Asset Hash of a Token
+* ERC721Metadata
+** Set Metadata URI and Asset Hash of a Token
+** Read Metadata URI and Asset Hash of a Token
+* ERC721SegmentAllocation
+** Add a Token to a Segment
+** Read the Segment of a Token
+** Remove a Token from a Segment
+
+==== Quorum Blockchain (Blackbox)
+
+The Quorum blockchain is a decentralized storage for information that ensures that access can only be made by authorized users. In the context of the NFT-Folder, the Blockchain serves as the only repository for information about Tokens, Segments and Containers.
+
+=== Building Blocks - Level 2
+
+In level 2, the black boxes of level 1 become white boxes.
+We look into each component in detail.
+
+==== Project-specific Blockchain Connector (Whitebox)
+
+TODO
+
+==== Blockchain Connector (Whitebox)
+
+This section describes the Blockchain Connector architecture and its implementation.
+
+|===
+|Component |Description
+
+|Column 1, row 1
+|Column 2, row 1
+
+|Column 1, row 2
+|Column 2, row 2
+
+|Column 1, row 3
+|Column 2, row 3
+
+|Column 1, row 4
+|Column 2, row 4
+|===
+
+TODO UML Component diagram or UML Class diagram
+
+===== Component 1.1 (Blackbox)
+
+TODO
+
+===== Component 1.2 (Blackbox)
+
+TODO
+
+===== Component 1.3 (Blackbox)
+
+The Component 1.3 has the following interfaces not described as JavaDoc or OpenAPI: besides event queues for publishing and subscribing events there are TCP-Ports for ... communication in both directions.
+
+[cols="4",options="header"]
+|===
+|ID
+|Interfaces
+|Type
+|Message
+
+|1
+|AMPQ queue
+|Publish
+|Publish Message to RabbitMQ
+
+|2
+|MQTT topic
+|Subscription
+|Subscription for new ....
+|===
+
+==== Component 2 (Whitebox)
+
+The Component 2 .... It is composed of several components, as summarized in the table and displayed in the following figure.
+
+[cols="2",options="header"]
+|===
+|Component
+|Description
+
+|Column 1, row 1
+|Column 2, row 1
+
+|Column 1, row 2
+|Column 2, row 2
+
+|Column 1, row 3
+|Column 2, row 3
+
+|Column 1, row 4
+|Column 2, row 4
+|===
+
+TODO UML Component diagram or UML Class diagram
+
+===== Component 2.1 (Blackbox)
+
+TODO
+
+===== Component 2.2 (Blackbox)
+
+TODO
+
+=== Management Frontend (Whitebox)
+
+The Management Frontend is the XXX own visualization.
+It consists of components for ... management and for monitoring, as shown in the following figure.
+
+[cols="2",options="header"]
+|===
+|Component
+|Description
+
+|Column 1, row 1
+|Column 2, row 1
+
+|Column 1, row 2
+|Column 2, row 2
+
+|Column 1, row 3
+|Column 2, row 3
+
+|Column 1, row 4
+|Column 2, row 4
+|===
+
+The components occuring in the diagram only and not in the table are used as data classes.
+
+TODO UML Component diagram or UML Class diagram
+
+=== Building Blocks - Level 3
+
+We detail the blackbox components occurring on Level 2, which are developed within this project (i.e. not library components or components developed in other SE projects).
+
+==== Component 1.1 (Whitebox)
+
+Not yet implemented.
+
+==== Component 1.2 (Whitebox)
+
+The XXX .... It is composed of several components, as summarized in the table and displayed in the following figure.
+
+[cols="2",options="header"]
+|===
+|Component
+|Description
+
+|Column 1, row 1
+|Column 2, row 1
+
+|Column 1, row 2
+|Column 2, row 2
+
+|Column 1, row 3
+|Column 2, row 3
+
+|Column 1, row 4
+|Column 2, row 4
+|===
+
+TODO UML Component diagram or UML Class diagram
+
+===== Component 1.2.1 (Blackbox)
+
+TODO
+
+===== Component 1.2.2 (Blackbox)
+
+TODO
