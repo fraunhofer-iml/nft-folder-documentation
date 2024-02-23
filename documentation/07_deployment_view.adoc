@@ -2,39 +2,48 @@
 == Deployment View
 
 Software does not run without hardware.
-This view describes the deployment of XXX.
-It describes the technical infrastructure used to execute XXX, with infrastructure elements like clouds, computing nodes, and net topologies as well as other infrastructure elements and the mapping/installation of compiled software building block instances to that infrastructure elements.
+This view describes the deployment of the NFT-Folder.
+It describes the technical infrastructure used to execute the NFT-Folder, with infrastructure elements like clouds, computing nodes, and net topologies as well as other infrastructure elements and the mapping/installation of compiled software building block instances to that infrastructure elements.
 
-=== General Deployment Decisions
+=== Deployment of the NFT-Folder
 
-The XXX is part of an SE Platform Instance (i.e a K8s Cluster instance).
-In such an SE Platform Instance the following number of components may be deployed:
+The deployment of the individual components of the NFT folder differs.
+For this reason, we will briefly explain how to deploy each component.
 
-*Components of an SE Platform*
+==== Project-specific Blockchain Connector
 
-. One or more SE services → Project overview, and SE Reference Architecture
-. One or more IDS Connectors → IDS
-. One Logistics Broker → Logistics Broker
-. IoT Broker (optional) → IoT Broker
-. Blockchain Full-Node (optional) → Blockchain Broker
+Since the project-specific Blockchain Connector is deployed within the context of the external project utilizing the NFT folder, detailed discussion regarding it will not be provided here.
+However, it's crucial to note that the project-specific Blockchain Connector must have access to the Blockchain Connector.
 
-*An SE platform is*
+==== Blockchain Connector
 
-. the environment of SE services
-. Location does not "matter" (e.g., enterprise IT environment, a cloud environment, ...)
+Since the Blockchain Connector is a NestJS project, it can be deployed in various manners.
+Instructions on how to initiate the project can be found in the https://docs.nestjs.com/[nest.js documentation].
+An example demonstrating how the Blockchain Connector can be launched locally is available in the tutorial outlined in chapter 12.
 
-=== Deployment of the XXX
+Regardless of the method used to start the Blockchain Connector, it's essential to configure the following parameters in the .env file of the Blockchain Connector project:
 
-The XXXs sub-components are deployed separately as containers into a Kubernetes cluster used as execution environment.
-Each sub component is configured via Kubernetes resources (i.e. YAML files) which are deployed alongside the sub component container.
+Regardless of the method employed to initiate the Blockchain Connector, it's imperative to configure the following parameters:
 
-By design, those XXX sub-component deployments may be scaled to an arbitrary number of instances to increase performance as well as redundancy.
-However, true redundancy can only be gained if the underlying execution platform comprises multiple independent failure domains such as multiple machines, data centers or geographic locations and sub component deployments span multiple such failure domains.
+* **BLOCKCHAIN_URL**: Specifies the URL of the Blockchain where the Smart Contracts of the NFT Folder are deployed.
+This Blockchain must be accessible from the machine hosting the Blockchain Connector.
 
-==== Component 1
+* **PRIVATE_KEY**: The private key of the Blockchain user responsible for signing transactions.
 
-Deployed manually by operator ahead of other XXX sub-components Triple redundancy (no performance benefit, cannot be meaningfully scaled to more than four instances) MongoDB instances share state and replicate state changes to each other Unique access credentials are created during deployment and provided to other sub-components as Kubernetes resource inside the cluster Not accessible from outside the execution environment Uses large amounts of persistent storage (actual size may vary by use case) provided by the execution environment
+* **CONTAINER_ADDRESS**: The address of the deployed Container contract.
+Since each external project maintains its own instance of the Blockchain Connector and the Container Contract, the CONTAINER_ADDRESS can be permanently stored here.
 
-==== Component 2
+* **TOKEN_ADDRESS**: The address of the deployed Token contract.
 
-TODO ...
+==== Smart Contracts
+
+The Smart Contracts are deployed on the Blockchain using Hardhat, with deployment scripts included in the Smart Contract project.
+Upon executing these scripts via Hardhat, the addresses where the Smart Contracts are deployed on the Blockchain must be entered into the .env file of the Blockchain Connector.
+This step ensures that the Blockchain Connector can correctly send the transactions to the appropriate addresses.
+
+==== Quorum Blockchain
+
+The Smart Contracts are deployed on the Quorum Blockchain.
+This Blockchain comprises multiple nodes operating decentrally on separate servers.
+A minimum of 3 nodes is required to initialize the Quorum Blockchain, which can be initiated on a server and expanded with additional nodes on different servers.
+Furthermore, it is feasible to run a Quorum node within a Kubernetes environment.
