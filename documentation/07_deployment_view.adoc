@@ -1,31 +1,37 @@
-[[section-deployment-view]]
-== Deployment View
+[[chapter-deployment-view]]
+:docinfo: shared
+:toc: left
+:toclevels: 3
+:sectnums:
+:copyright: Open Logistics Foundation License 1.3
+
+= Deployment View
 
 Software does not run without hardware.
-This view describes the deployment of the NFT-Folder.
-It describes the technical infrastructure used to execute the NFT-Folder, with infrastructure elements like clouds, computing nodes, and net topologies as well as other infrastructure elements and the mapping/installation of compiled software building block instances to that infrastructure elements.
+This view describes the deployment of the {projectName}.
+It describes the technical infrastructure used to execute the {projectName}, with infrastructure elements like clouds, computing nodes, and net topologies as well as other infrastructure elements and the mapping/installation of compiled software building block instances to that infrastructure elements.
 
-=== Deployment of the NFT-Folder
+== Deployment of the {projectName}
 
-The deployment of the individual components of the NFT folder differs.
+The deployment of the individual components of the {projectName} differs.
 For this reason, we will briefly explain how to deploy each component.
 
-==== Project-specific Blockchain Connector
+=== Project-specific Blockchain Connector
 
-Since the project-specific Blockchain Connector is deployed within the context of the external project utilizing the NFT folder, detailed discussion regarding it will not be provided here.
+Since the project-specific Blockchain Connector is deployed within the context of the external project utilizing the {projectName}, detailed discussion regarding it will not be provided here.
 However, it's crucial to note that the project-specific Blockchain Connector must have access to the Blockchain Connector.
 
-==== Blockchain Connector
+=== Blockchain Connector
 
 Since the Blockchain Connector is a NestJS project, it can be deployed in various manners.
-Instructions on how to initiate the project can be found in the https://docs.nestjs.com/[nest.js documentation].
-An example demonstrating how the Blockchain Connector can be launched locally is available in the tutorial outlined in chapter 12.
+Instructions on how to initiate the project can be found in the https://docs.nestjs.com/[NestJS documentation].
+An example demonstrating how the Blockchain Connector can be launched locally is available in the tutorial outlined in <<chapter-tutorial>>.
 
 Regardless of the method used to start the Blockchain Connector, it's essential to configure the following parameters in the .env file of the Blockchain Connector project:
 
 Regardless of the method employed to initiate the Blockchain Connector, it's imperative to configure the following parameters:
 
-* **BLOCKCHAIN_URL**: Specifies the URL of the Blockchain where the Smart Contracts of the NFT Folder are deployed.
+* **BLOCKCHAIN_URL**: Specifies the URL of the Blockchain where the Smart Contracts of the {projectName} are deployed.
 This Blockchain must be accessible from the machine hosting the Blockchain Connector.
 
 * **PRIVATE_KEY**: The private key of the Blockchain user responsible for signing transactions.
@@ -35,13 +41,13 @@ Since each external project maintains its own instance of the Blockchain Connect
 
 * **TOKEN_ADDRESS**: The address of the deployed Token contract.
 
-==== Smart Contracts
+=== Smart Contracts
 
 The Smart Contracts are deployed on the Blockchain using Hardhat, with deployment scripts included in the Smart Contract project.
 Upon executing these scripts via Hardhat, the addresses where the Smart Contracts are deployed on the Blockchain must be entered into the .env file of the Blockchain Connector.
 This step ensures that the Blockchain Connector can correctly send the transactions to the appropriate addresses.
 
-==== Quorum Blockchain
+=== Quorum Blockchain
 
 The Smart Contracts are deployed on the Quorum Blockchain.
 This Blockchain comprises multiple nodes operating decentrally on separate servers.

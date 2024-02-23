@@ -1,4 +1,10 @@
 [[chapter-tutorial]]
+:docinfo: shared
+:toc: left
+:toclevels: 3
+:sectnums:
+:copyright: Open Logistics Foundation License 1.3
+
 = Tutorial
 
 This chapter offers a detailed, step-by-step guide for setting up the components of {projectName}.
@@ -8,26 +14,14 @@ Follow along to get your application up and running with ease.
 Attention: The smart contracts will be deployed to an in-process blockchain for development purposes.
 This means all data will be lost when the blockchain is stopped.
 
-*Contents*
-
-* <<12.1 Prerequisites>>
-** <<12.1.1 Installing Git>>
-** <<12.1.2 Installing Node.js>>
-** <<12.1.3 Cloning the Codebases>>
-* <<12.2 Deploying the Smart Contracts>>
-* <<12.3 Running the Blockchain Connector>>
-** <<12.3.1 Running the Blockchain Connector on the Host Machine>>
-** <<12.3.2 Running the Blockchain Connector in a Docker Container>>
-* <<12.4 Testing Communication between the Blockchain Connector and the Smart Contracts>>
-
-== 12.1 Prerequisites
+== Prerequisites
 
 Properly preparing your environment is crucial for a successful installation and usage of {projectName}.
 This section outlines the key prerequisites necessary for a smooth setup.
 Following these guidelines will enhance your installation experience.
 Note: The commands and procedures described in this guide have been successfully tested on an Ubuntu operating system.
 
-=== 12.1.1 Installing Git
+=== Installing Git
 
 Git is essential for version control and managing updates from the Open Logistics Foundation GitLab repository.
 
@@ -40,7 +34,7 @@ If Git is not yet installed on your system, follow these steps:
 [source,shell]
 git --version
 
-=== 12.1.2 Installing Node.js
+=== Installing Node.js
 
 Node.js is a JavaScript runtime that allows you to run JavaScript code outside of a web browser.
 It is also used to install and manage the dependencies of the blockchain connector and the smart contracts.
@@ -55,7 +49,9 @@ If Node.js is not yet installed on your system, follow these steps:
 node --version
 npm --version
 
-=== 12.1.3 Cloning the Codebases
+=== Cloning the Codebases
+
+TODO: replace these Fraunhofer URLs with OLF URLs before mirroring
 
 The GitLab subgroup for {projectName} is available on the [Fraunhofer GitLab](https://gitlab.cc-asp.fraunhofer.de/silicon-economy/base/blockchainbroker/ethereum/projects/nft-folder).
 It contains three different projects: `Blockchain Connector`, `Smart Contracts`, and `Documentation`.
@@ -70,7 +66,7 @@ git clone git@gitlab.cc-asp.fraunhofer.de:silicon-economy/base/blockchainbroker/
 [source,shell]
 git clone git@gitlab.cc-asp.fraunhofer.de:silicon-economy/base/blockchainbroker/ethereum/projects/nft-folder/blockchain-connector.git
 
-== 12.2 Deploying the Smart Contracts
+== Deploying the Smart Contracts
 
 The smart contracts are deployed to the blockchain using Hardhat.
 This development environment helps developers manage the lifecycle of their smart contracts and provides a comprehensive environment for compiling, testing and deploying them.
@@ -108,12 +104,12 @@ npm run local:deploy-token
 
 8. *Copy* the addresses of the deployed smart contracts from the terminal output and save them for later use
 
-== 12.3 Running the Blockchain Connector
+== Running the Blockchain Connector
 
 The blockchain connector is a TypeScript application that connects to the blockchain and provides a REST API to interact with the blockchain.
 This application can run either directly on the host machine through Node.js or within a Docker container using Docker Compose.
 
-== 12.3.1 Running the Blockchain Connector on the Host Machine
+=== Running the Blockchain Connector on the Host Machine
 
 Perform the following steps to run the blockchain connector on the host machine:
 
@@ -135,7 +131,7 @@ npm install
 [source,shell]
 npm run start
 
-== 12.3.2 Running the Blockchain Connector in a Docker Container
+=== Running the Blockchain Connector in a Docker Container
 
 Perform the following steps to run the blockchain connector in a Docker container:
 
@@ -161,7 +157,7 @@ npm run build
 [source,shell]
 docker compose up
 
-== 12.4 Testing Communication between the Blockchain Connector and the Smart Contracts
+== Testing Communication between the Blockchain Connector and the Smart Contracts
 
 To verify that the blockchain connector is successfully communicating with the smart contracts, perform the following steps:
 
