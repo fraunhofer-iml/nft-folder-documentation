@@ -1,0 +1,536 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/segments": {
+      "post": {
+        "operationId": "SegmentController_createSegment",
+        "summary": "Creates a new Segment",
+        "description": "This endpoint accepts a name and creates a new Segment with this name",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "Contains the name of the new Segment",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SegmentCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The Segment has been successfully created."
+          },
+          "400": {
+            "description": "The input does not have the correct format."
+          }
+        },
+        "tags": [
+          "Segments"
+        ]
+      },
+      "get": {
+        "operationId": "SegmentController_getAllSegments",
+        "summary": "Returns all segments",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The list of all segments that are stored on the blockchain.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SegmentReadDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Segments"
+        ]
+      }
+    },
+    "/segments/{index}": {
+      "get": {
+        "operationId": "SegmentController_getSegment",
+        "summary": "Returns the segment at the specified index",
+        "parameters": [
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "description": "The index of the searched Segment",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The Segment at the specified index",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentReadDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The specified index has not the correct format or there is no Segment at the specified index."
+          }
+        },
+        "tags": [
+          "Segments"
+        ]
+      }
+    },
+    "/segments/{index}/add-token": {
+      "patch": {
+        "operationId": "SegmentController_addToken",
+        "summary": "Adds a token to the segment at the specified index",
+        "parameters": [
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Contains the address and id of the token",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenContractInfoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The token was successfully added to the segment"
+          },
+          "400": {
+            "description": "The specified index has not the correct format, there is no Segment at the specified index, the token does not exist or the token has already been added to the segment."
+          }
+        },
+        "tags": [
+          "Segments"
+        ]
+      }
+    },
+    "/segments/{index}/remove-token": {
+      "patch": {
+        "operationId": "SegmentController_removeToken",
+        "summary": "Removes a token from the segment at the specified index",
+        "parameters": [
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Contains the address and id of the token",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenContractInfoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The token was successfully removed from the segment"
+          },
+          "400": {
+            "description": "The specified index has not the correct format, there is no Segment at the specified index, the token does not exist or the token is not part of the segment."
+          }
+        },
+        "tags": [
+          "Segments"
+        ]
+      }
+    },
+    "/tokens": {
+      "post": {
+        "operationId": "TokenRestController_mintToken",
+        "summary": "Creates a new token",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "Contains all relevant information for the creation of a token",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenMintDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The Token has been successfully created."
+          },
+          "400": {
+            "description": "The input does not have the correct format or a token with this remoteId already exists."
+          }
+        },
+        "tags": [
+          "Tokens"
+        ]
+      },
+      "get": {
+        "operationId": "TokenRestController_getToken",
+        "summary": "Returns the token with the specified tokenId or remoteId",
+        "parameters": [
+          {
+            "name": "tokenId",
+            "required": false,
+            "in": "query",
+            "description": "The id of the Token to be returned",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "remoteId",
+            "required": false,
+            "in": "query",
+            "description": "The remoteId of the Token to be returned",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The token for the specified tokenId or remoteId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenGetDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A token with the specified tokenId or remoteId does not exist."
+          }
+        },
+        "tags": [
+          "Tokens"
+        ]
+      }
+    },
+    "/tokens/{tokenId}/segments": {
+      "get": {
+        "operationId": "TokenRestController_getAllSegments",
+        "summary": "Returns all segments which contain the specific token",
+        "parameters": [
+          {
+            "name": "tokenId",
+            "required": true,
+            "in": "path",
+            "description": "The id of the token whose segments are to be returned",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of segments that contain the specified token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SegmentReadDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Tokens"
+        ]
+      }
+    },
+    "/tokens/{remoteId}": {
+      "patch": {
+        "operationId": "TokenRestController_updateToken",
+        "summary": "Updates the token with the specified tokenId or remoteId",
+        "parameters": [
+          {
+            "name": "remoteId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Contains the new properties of the Token",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The Token has been successfully updated."
+          },
+          "400": {
+            "description": "A token with the specified remoteId does not exist."
+          }
+        },
+        "tags": [
+          "Tokens"
+        ]
+      }
+    },
+    "/tokens/{tokenId}": {
+      "delete": {
+        "operationId": "TokenRestController_burnToken",
+        "summary": "Burns the token with the specified id",
+        "parameters": [
+          {
+            "name": "tokenId",
+            "required": true,
+            "in": "path",
+            "description": "The id of the Token to be removed",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The Token has been successfully removed."
+          },
+          "400": {
+            "description": "A token with the specified remoteId does not exist or the current user is not the owner of the token with the specified id."
+          }
+        },
+        "tags": [
+          "Tokens"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Blockchain Connector",
+    "description": "This web API provides endpoints to manage Segments and Tokens.",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "https"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "SegmentCreateDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "SegmentReadDto": {
+        "type": "object",
+        "properties": {
+          "segmentAddress": {
+            "type": "string"
+          },
+          "segmentName": {
+            "type": "string"
+          },
+          "tokenContractInfos": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "segmentAddress",
+          "segmentName",
+          "tokenContractInfos"
+        ]
+      },
+      "TokenContractInfoDto": {
+        "type": "object",
+        "properties": {
+          "tokenAddress": {
+            "type": "string"
+          },
+          "tokenId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tokenAddress",
+          "tokenId"
+        ]
+      },
+      "TokenAssetDto": {
+        "type": "object",
+        "properties": {
+          "uri": {
+            "type": "string"
+          },
+          "hash": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "uri",
+          "hash"
+        ]
+      },
+      "TokenMetadataDto": {
+        "type": "object",
+        "properties": {
+          "uri": {
+            "type": "string"
+          },
+          "hash": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "uri",
+          "hash"
+        ]
+      },
+      "TokenMintDto": {
+        "type": "object",
+        "properties": {
+          "remoteId": {
+            "type": "string"
+          },
+          "asset": {
+            "$ref": "#/components/schemas/TokenAssetDto"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/TokenMetadataDto"
+          },
+          "additionalInformation": {
+            "type": "string"
+          },
+          "ownerAddress": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "remoteId",
+          "asset",
+          "metadata",
+          "additionalInformation",
+          "ownerAddress"
+        ]
+      },
+      "TokenGetDto": {
+        "type": "object",
+        "properties": {
+          "remoteId": {
+            "type": "string"
+          },
+          "asset": {
+            "$ref": "#/components/schemas/TokenAssetDto"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/TokenMetadataDto"
+          },
+          "additionalInformation": {
+            "type": "string"
+          },
+          "ownerAddress": {
+            "type": "string"
+          },
+          "minterAddress": {
+            "type": "string"
+          },
+          "createdOn": {
+            "type": "string"
+          },
+          "lastUpdatedOn": {
+            "type": "string"
+          },
+          "tokenId": {
+            "type": "number"
+          },
+          "tokenAddress": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "remoteId",
+          "asset",
+          "metadata",
+          "additionalInformation",
+          "ownerAddress",
+          "minterAddress",
+          "createdOn",
+          "lastUpdatedOn",
+          "tokenId",
+          "tokenAddress"
+        ]
+      },
+      "TokenUpdateDto": {
+        "type": "object",
+        "properties": {
+          "assetUri": {
+            "type": "string"
+          },
+          "assetHash": {
+            "type": "string"
+          },
+          "metadataUri": {
+            "type": "string"
+          },
+          "metadataHash": {
+            "type": "string"
+          },
+          "additionalInformation": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "assetUri",
+          "assetHash",
+          "metadataUri",
+          "metadataHash",
+          "additionalInformation"
+        ]
+      }
+    }
+  }
+}
