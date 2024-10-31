@@ -16,20 +16,18 @@ It describes the technical infrastructure used to execute the {projectName}, wit
 The deployment of the individual components of the {projectName} differs.
 For this reason, we will briefly explain how to deploy each component.
 
-=== Project-specific Blockchain Connector
-
-Since the project-specific Blockchain Connector is deployed within the context of the external project utilizing the {projectName}, detailed discussion regarding it will not be provided here.
-However, it's crucial to note that the project-specific Blockchain Connector must have access to the Blockchain Connector.
-
 === Blockchain Connector
 
-Since the Blockchain Connector is a NestJS project, it can be deployed in various manners.
-Instructions on how to initiate the project can be found in the https://docs.nestjs.com/[NestJS documentation].
-An example demonstrating how the Blockchain Connector can be launched locally is available in the tutorial outlined in <<chapter-tutorial>>.
+Since the project-specific Blockchain Connector is deployed within the context of the external project utilizing the {projectName}, detailed discussion regarding it will not be provided here.
+However, it's crucial to note that the project-specific Blockchain Connector must have access to the Blockchain. The project-specific blockchain connector must be a Node.js project so that the blockchain connector library can be imported.
 
-Regardless of the method used to start the Blockchain Connector, it's essential to configure the following parameters in the .env file of the Blockchain Connector project:
+Since the Blockchain Connector is a NestJS library, it is used within the project-specific Blockchain Connector.
+Instructions on how to import the modules into the project can be found in the https://docs.nestjs.com/[NestJS documentation].
+An example demonstrating how a possible project-specific Blockchain Connector (that uses the Blockchain Connector library) can be launched locally is available in the tutorial outlined in <<chapter-tutorial>>.
 
-Regardless of the method employed to initiate the Blockchain Connector, it's imperative to configure the following parameters:
+Regardless of the method used to start the project-specific Blockchain Connector, it's essential to configure the following parameters in the .env file of the project-specific Blockchain Connector project:
+
+Regardless of the method employed to initiate the project-specific Blockchain Connector, it's imperative to configure the following parameters:
 
 * **BLOCKCHAIN_URL**: Specifies the URL of the Blockchain where the Smart Contracts of the {projectName} are deployed.
 This Blockchain must be accessible from the machine hosting the Blockchain Connector.
@@ -40,6 +38,14 @@ This Blockchain must be accessible from the machine hosting the Blockchain Conne
 Since each external project maintains its own instance of the Blockchain Connector and the Container Contract, the CONTAINER_ADDRESS can be permanently stored here.
 
 * **TOKEN_ADDRESS**: The address of the deployed Token contract.
+
+* **CONTAINER_ADDRESS**: The abi of the Container Smart Contract to be accessed. Further information on solidity abi can be found under https://docs.soliditylang.org/en/latest/abi-spec.html/[Soldity ABI documentation].
+
+* **SEGMENT_ABI**: The abi of the Segment Smart Contract to be accessed. Further information on solidity abi can be found under https://docs.soliditylang.org/en/latest/abi-spec.html/[Soldity ABI documentation].
+
+* **TOKEN_ABI**: The abi of the Token Smart Contract to be accessed. Further information on solidity abi can be found under https://docs.soliditylang.org/en/latest/abi-spec.html/[Soldity ABI documentation].
+
+* **ENABLE_DEBUG_CONTROLLER**: This flag specifies whether the controllers of the Blockchain Connector library (TokenController, SegmentController, etc.) should be activated so that they can be used.
 
 === Smart Contracts
 

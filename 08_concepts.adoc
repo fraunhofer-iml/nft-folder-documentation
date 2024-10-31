@@ -26,12 +26,12 @@ Each microservice can be located in a different place and implemented using a di
 The goals of this architecture are reuse, high cohesion, low coupling, separation of concerns, single responsibility, and information hiding.
 Its advantages are modularity and maintainability, as well as faster adaptation to changing requirements (scaling).
 
-The Blockchain Connector is designed to conform to microservice architecture.
+As the Blockchain Connector is a library, no precise statement can be made about the properties of the project-specific Blockchain Connector. However, it is advisable to design it as a microservice (e.g. with Nest.js).
 
 === Internal Communication
 
-Communication between the project-specific Blockchain Connector and the Blockchain Connector takes place via a REST API.
-Communication between the Blockchain Connector and the Blockchain takes place using the web3.js library, which uses an RPC endpoint of the Blockchain to send transactions and execute read accesses.
+Communication between the project-specific Blockchain Connector and the Blockchain Connector takes place implicitly by integrating the Blockchain Connector as a library.
+Communication between the project-specific Blockchain Connector and the Blockchain takes place using the ethers.js library, which uses an RPC endpoint of the Blockchain to send transactions and execute read accesses.
 
 == Cross-cutting Solutions
 
@@ -43,7 +43,6 @@ In the Blockchain Connector, errors resulting from incorrect inputs to the REST 
 This standardized error handling mechanism is implemented across all controllers within the Blockchain Connector.
 Moreover, custom errors are employed within the Smart Contracts to validate entries.
 Should an input be deemed incorrect, a corresponding custom error is generated.
-When the Blockchain Connector interacts with the Smart Contracts, any such errors are propagated to the end user of the REST API via the error message payload."
 
 === Testability
 

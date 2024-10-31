@@ -20,8 +20,8 @@ The following diagram outlines how the components of the {projectName} interact 
 image::drawio/chapter_6/component_communication.svg[BC-Connector Communication]
 
 1. The *external project* using the {projectName} must develop its own project-specific Blockchain Connector tailored to its specific use case functionality.
-2. The *project-specific Blockchain Connector* interacts with the smart contracts through the REST API of the Blockchain Connector.
-3. The *Blockchain Connector* uses the web3.js library to establish a connection to the blockchain, enabling transactions and read operations.
+2. The *project-specific Blockchain Connector* interacts with the smart contracts through the functions provided by the Blockchain Connector library.
+3. The *Blockchain Connector library* uses the ethers.js library to establish a connection to the blockchain, enabling transactions and read operations.
 4. The *Quorum Blockchain* is accessible through JSON-RPC.
 
 == Use Cases and process information

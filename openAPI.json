@@ -109,7 +109,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TokenContractInfoDto"
+                "$ref": "#/components/schemas/TokenInformationDto"
               }
             }
           }
@@ -147,7 +147,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TokenContractInfoDto"
+                "$ref": "#/components/schemas/TokenInformationDto"
               }
             }
           }
@@ -167,26 +167,32 @@
     },
     "/tokens": {
       "post": {
-        "operationId": "TokenRestController_mintToken",
-        "summary": "Creates a new token",
-        "parameters": [],
+        "operationId": "TokenRestController_createToken",
+        "parameters": [
+          {
+            "name": "appendToHierarchy",
+            "required": true,
+            "in": "query",
+            "description": "Whether the token should be appended to a hierarchy or not",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "description": "Contains all relevant information for the creation of a token",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TokenMintDto"
+                "$ref": "#/components/schemas/TokenCreateDto"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "The Token has been successfully created."
-          },
-          "400": {
-            "description": "The input does not have the correct format or a token with this remoteId already exists."
+            "description": ""
           }
         },
         "tags": [
@@ -194,94 +200,61 @@
         ]
       },
       "get": {
+        "operationId": "TokenRestController_getTokens",
+        "parameters": [
+          {
+            "name": "remoteId",
+            "required": false,
+            "in": "query",
+            "description": "The remoteId of the tokens to be returned",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Tokens"
+        ]
+      }
+    },
+    "/tokens/{tokenId}": {
+      "get": {
         "operationId": "TokenRestController_getToken",
-        "summary": "Returns the token with the specified tokenId or remoteId",
         "parameters": [
           {
             "name": "tokenId",
-            "required": false,
-            "in": "query",
+            "required": true,
+            "in": "path",
             "description": "The id of the Token to be returned",
             "schema": {
               "type": "number"
             }
-          },
-          {
-            "name": "remoteId",
-            "required": false,
-            "in": "query",
-            "description": "The remoteId of the Token to be returned",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
           "200": {
-            "description": "The token for the specified tokenId or remoteId",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TokenGetDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "A token with the specified tokenId or remoteId does not exist."
+            "description": ""
           }
         },
         "tags": [
           "Tokens"
         ]
-      }
-    },
-    "/tokens/{tokenId}/segments": {
-      "get": {
-        "operationId": "TokenRestController_getAllSegments",
-        "summary": "Returns all segments which contain the specific token",
+      },
+      "patch": {
+        "operationId": "TokenRestController_updateToken",
         "parameters": [
           {
             "name": "tokenId",
             "required": true,
             "in": "path",
-            "description": "The id of the token whose segments are to be returned",
+            "description": "The id of the token to be updated",
             "schema": {
               "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The list of segments that contain the specified token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SegmentReadDto"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Tokens"
-        ]
-      }
-    },
-    "/tokens/{remoteId}": {
-      "patch": {
-        "operationId": "TokenRestController_updateToken",
-        "summary": "Updates the token with the specified tokenId or remoteId",
-        "parameters": [
-          {
-            "name": "remoteId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
             }
           }
         ],
@@ -298,10 +271,29 @@
         },
         "responses": {
           "200": {
-            "description": "The Token has been successfully updated."
-          },
-          "400": {
-            "description": "A token with the specified remoteId does not exist."
+            "description": ""
+          }
+        },
+        "tags": [
+          "Tokens"
+        ]
+      },
+      "delete": {
+        "operationId": "TokenRestController_deleteToken",
+        "parameters": [
+          {
+            "name": "tokenId",
+            "required": true,
+            "in": "path",
+            "description": "The id of the Token to be burned",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
           }
         },
         "tags": [
@@ -309,16 +301,89 @@
         ]
       }
     },
-    "/tokens/{tokenId}": {
-      "delete": {
-        "operationId": "TokenRestController_burnToken",
-        "summary": "Burns the token with the specified id",
+    "/tokens/{tokenId}/parents": {
+      "get": {
+        "operationId": "TokenRestController_getParentIds",
         "parameters": [
           {
             "name": "tokenId",
             "required": true,
             "in": "path",
-            "description": "The id of the Token to be removed",
+            "description": "The id of the token whose parent ids are to be returned",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "status",
+            "required": true,
+            "in": "query",
+            "description": "The status of the parent ids to be returned ('confirmed' or 'unconfirmed')",
+            "schema": {
+              "enum": [
+                "confirmed",
+                "unconfirmed"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Tokens"
+        ]
+      }
+    },
+    "/tokens/{tokenId}/children": {
+      "get": {
+        "operationId": "TokenRestController_getChildIds",
+        "parameters": [
+          {
+            "name": "tokenId",
+            "required": true,
+            "in": "path",
+            "description": "The id of the token whose child ids are to be returned",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "status",
+            "required": true,
+            "in": "query",
+            "description": "The status of the child ids to be returned ('confirmed' or 'unconfirmed')",
+            "schema": {
+              "enum": [
+                "confirmed",
+                "unconfirmed"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Tokens"
+        ]
+      }
+    },
+    "/tokens/{tokenId}/segments": {
+      "get": {
+        "operationId": "TokenRestController_getSegments",
+        "parameters": [
+          {
+            "name": "tokenId",
+            "required": true,
+            "in": "path",
+            "description": "The id of the token whose segments to be returned",
             "schema": {
               "type": "number"
             }
@@ -326,14 +391,180 @@
         ],
         "responses": {
           "200": {
-            "description": "The Token has been successfully removed."
-          },
-          "400": {
-            "description": "A token with the specified remoteId does not exist or the current user is not the owner of the token with the specified id."
+            "description": ""
           }
         },
         "tags": [
           "Tokens"
+        ]
+      }
+    },
+    "/tokens/{tokenId}/children/{childId}/confirm": {
+      "patch": {
+        "operationId": "TokenRestController_confirmChild",
+        "parameters": [
+          {
+            "name": "tokenId",
+            "required": true,
+            "in": "path",
+            "description": "The id of the token that is the parent of the child to be confirmed",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "childId",
+            "required": true,
+            "in": "path",
+            "description": "The id of the child to be confirmed",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Tokens"
+        ]
+      }
+    },
+    "/data-integrities/files/hash": {
+      "post": {
+        "operationId": "DataIntegrityController_hashFile",
+        "summary": "Hash a file and return its hash",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fileToHash": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The file to hash (e.g., PDF, image, etc.)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Data Integrities"
+        ]
+      }
+    },
+    "/data-integrities/files/verify": {
+      "post": {
+        "operationId": "DataIntegrityController_verifyFile",
+        "summary": "Verify if a file has the same hash as its original hash",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fileToHash": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The file to hash (e.g., PDF, image, etc.)"
+                  },
+                  "originalHash": {
+                    "type": "string",
+                    "format": "hexadecimal",
+                    "description": "The original hash of the file, represented as a 64-character hexadecimal string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Data Integrities"
+        ]
+      }
+    },
+    "/data-integrities/strings/hash": {
+      "post": {
+        "operationId": "DataIntegrityController_hashString",
+        "summary": "Hash a string and return its hash",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "stringToHash": {
+                    "type": "string",
+                    "description": "The string to hash"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Data Integrities"
+        ]
+      }
+    },
+    "/data-integrities/strings/verify": {
+      "post": {
+        "operationId": "DataIntegrityController_verifyString",
+        "summary": "Verify if a string has the same hash as its original hash",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "stringToHash": {
+                    "type": "string",
+                    "description": "The string to hash"
+                  },
+                  "originalHash": {
+                    "type": "string",
+                    "format": "hexadecimal",
+                    "description": "The original hash of the string, represented as a 64-character hexadecimal string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Data Integrities"
         ]
       }
     }
@@ -345,11 +576,7 @@
     "contact": {}
   },
   "tags": [],
-  "servers": [
-    {
-      "url": "https"
-    }
-  ],
+  "servers": [],
   "components": {
     "schemas": {
       "SegmentCreateDto": {
@@ -372,7 +599,7 @@
           "segmentName": {
             "type": "string"
           },
-          "tokenContractInfos": {
+          "tokenInformation": {
             "type": "array",
             "items": {
               "type": "string"
@@ -382,10 +609,10 @@
         "required": [
           "segmentAddress",
           "segmentName",
-          "tokenContractInfos"
+          "tokenInformation"
         ]
       },
-      "TokenContractInfoDto": {
+      "TokenInformationDto": {
         "type": "object",
         "properties": {
           "tokenAddress": {
@@ -430,7 +657,7 @@
           "hash"
         ]
       },
-      "TokenMintDto": {
+      "TokenCreateDto": {
         "type": "object",
         "properties": {
           "remoteId": {
@@ -442,66 +669,22 @@
           "metadata": {
             "$ref": "#/components/schemas/TokenMetadataDto"
           },
-          "additionalInformation": {
+          "additionalData": {
             "type": "string"
           },
-          "ownerAddress": {
-            "type": "string"
+          "parentIds": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
           }
         },
         "required": [
           "remoteId",
           "asset",
           "metadata",
-          "additionalInformation",
-          "ownerAddress"
-        ]
-      },
-      "TokenGetDto": {
-        "type": "object",
-        "properties": {
-          "remoteId": {
-            "type": "string"
-          },
-          "asset": {
-            "$ref": "#/components/schemas/TokenAssetDto"
-          },
-          "metadata": {
-            "$ref": "#/components/schemas/TokenMetadataDto"
-          },
-          "additionalInformation": {
-            "type": "string"
-          },
-          "ownerAddress": {
-            "type": "string"
-          },
-          "minterAddress": {
-            "type": "string"
-          },
-          "createdOn": {
-            "type": "string"
-          },
-          "lastUpdatedOn": {
-            "type": "string"
-          },
-          "tokenId": {
-            "type": "number"
-          },
-          "tokenAddress": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "remoteId",
-          "asset",
-          "metadata",
-          "additionalInformation",
-          "ownerAddress",
-          "minterAddress",
-          "createdOn",
-          "lastUpdatedOn",
-          "tokenId",
-          "tokenAddress"
+          "additionalData",
+          "parentIds"
         ]
       },
       "TokenUpdateDto": {
@@ -519,7 +702,7 @@
           "metadataHash": {
             "type": "string"
           },
-          "additionalInformation": {
+          "additionalData": {
             "type": "string"
           }
         },
@@ -528,7 +711,7 @@
           "assetHash",
           "metadataUri",
           "metadataHash",
-          "additionalInformation"
+          "additionalData"
         ]
       }
     }

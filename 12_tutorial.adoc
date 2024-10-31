@@ -62,9 +62,9 @@ The `Smart Contracts` project contains the Solidity smart contracts, and the `Bl
 [source,shell]
 git clone git@gitlab.cc-asp.fraunhofer.de:silicon-economy/base/blockchainbroker/ethereum/projects/nft-folder/smart-contracts.git
 
-2. *Clone* the `Blockchain Connector` repository using this command:
+2. *Create* a new project as project-specific Blockchain Connector (e.g. with Nest.js) und füge die Blockchain Connector library als npm package hinzu
 [source,shell]
-git clone git@gitlab.cc-asp.fraunhofer.de:silicon-economy/base/blockchainbroker/ethereum/projects/nft-folder/blockchain-connector.git
+npm install @nft-folder/blockchain-connector
 
 == Deploying the Smart Contracts
 
@@ -104,9 +104,11 @@ npm run local:deploy-token
 
 8. *Copy* the addresses of the deployed smart contracts from the terminal output and save them for later use
 
-== Running the Blockchain Connector
+== Running the project-specific Blockchain Connector
 
-The blockchain connector is a TypeScript application that connects to the blockchain and provides a REST API to interact with the blockchain.
+The following section is an example of a project-specific blockchain connector as a Nest.js microservice.
+
+The project-specific blockchain connector is a TypeScript application that connects to the blockchain via the imported Blockchain Connector library.
 This application can run either directly on the host machine through Node.js or within a Docker container using Docker Compose.
 
 === Running the Blockchain Connector on the Host Machine
@@ -121,7 +123,7 @@ cd ../blockchain-connector
 [source,shell]
 mv .env.example .env
 
-3. *Ensure* that the `CONTAINER_ADDRESS` and `TOKEN_ADDRESS` values in the `.env` file are set to the saved addresses of the deployed smart contracts from the previous section
+3. *Ensure* that the `CONTAINER_ADDRESS` and `TOKEN_ADDRESS` values in the `.env` file are set to the saved addresses of the deployed smart contracts from the previous section and that the entries for `CONTAINER_ABI`, `SEGMENT_ABI` and `TOKEN_ABI` also correspond to the ABIs of the deployed smart contract versions.
 
 4. *Install* the dependencies:
 [source,shell]
@@ -143,7 +145,7 @@ cd ../blockchain-connector
 [source,shell]
 mv .env.example .env
 
-3. *Ensure* that the `CONTAINER_ADDRESS` and `TOKEN_ADDRESS` values in the `.env` file are set to the saved addresses of the deployed smart contracts from the previous section
+3. *Ensure* that the `CONTAINER_ADDRESS` and `TOKEN_ADDRESS` values in the `.env` file are set to the saved addresses of the deployed smart contracts from the previous section and that the entries for `CONTAINER_ABI`, `SEGMENT_ABI` and `TOKEN_ABI` also correspond to the ABIs of the deployed smart contract versions.
 
 4. *Install* the dependencies:
 [source,shell]
@@ -157,9 +159,9 @@ npm run build
 [source,shell]
 docker compose up
 
-== Testing Communication between the Blockchain Connector and the Smart Contracts
+== Testing Communication between the project-specific Blockchain Connector and the Smart Contracts
 
-To verify that the blockchain connector is successfully communicating with the smart contracts, perform the following steps:
+To verify that the blockchain connector is successfully communicating with the smart contracts, perform the following steps. (To do this, the ENABLE_DEBUG_CONTROLLER flag in the env. file must be set to true)
 
 1. *Open* a web browser and navigate to `http://localhost:3000/api`
 2. *Click* on the `POST /tokens` endpoint to create a new token
