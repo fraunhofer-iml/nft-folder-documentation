@@ -1,0 +1,70 @@
+[[chapter-deployment-view]]
+:docinfo: shared
+:toc: left
+:toclevels: 3
+:sectnums:
+:copyright: Apache-2.0
+:projectName: NFT-Folder
+
+= Deployment View
+
+This chapter outlines the deployment of the {projectName}, detailing the technical infrastructure required to run the project and all necessary infrastructure elements.
+
+== Deployment of the {projectName}
+
+The deployment process for the individual components of the {projectName} varies.
+Below, we provide a brief explanation of how to deploy each component.
+
+=== Blockchain Connector
+
+Since the project-specific Blockchain Connector is deployed within the context of the external project utilizing the {projectName}, detailed discussion regarding it will not be provided here.
+However, it's crucial to note that the project-specific blockchain connector must be a Node.js project, so that the Blockchain Connector library can be imported.
+
+As a NestJS library, the Blockchain Connector is used within the project-specific Blockchain Connector.
+Instructions for importing modules can be found in the https://docs.nestjs.com/[NestJS documentation].
+A tutorial demonstrating how to launch a project-specific Blockchain Connector locally is available in <<chapter-tutorial>>.
+
+The following parameters must be configured in the .env file of the project-specific blockchain connector, with guidance available in the .env.example file:
+
+* **BCC_ENDPOINTS_ENABLED**: Set to true to activate the endpoints (e.g., TokenController, SegmentController) of the Blockchain Connector library. The Swagger documentation under '/api' will include these endpoints.
+
+* **BCC_BLOCKCHAIN_URL**: The URL of the blockchain where the {projectName}'s Smart Contracts are deployed. This blockchain must be accessible from the machine hosting the Blockchain Connector.
+
+* **BCC_BLOCK_TIME**:  Specifies the block time of the blockchain in use.
+
+* **BCC_PRIVATE_KEY**: The private key for signing transactions on the blockchain.
+
+* **BCC_CONTAINER_ADDRESS**: The address of the deployed Container contract. Each external project maintains its own instance, so this can be permanently stored.
+
+* **BCC_TOKEN_ADDRESS**: The address of the deployed Token contract.
+
+* **BCC_CONTAINER_ABI_PATH**: Path to the ABI of the Container Smart Contract.
+
+* **BCC_SEGMENT_ABI_PATH**: Path to the ABI of the Segment Smart Contract.
+
+* **BCC_TOKEN_ABI_PATH**: Path to the ABI of the Segment Smart Contract.
+
+More information on solidity ABI can be found in the https://docs.soliditylang.org/en/latest/abi-spec.html/[Soldity ABI documentation].
+
+=== Smart Contracts
+
+The Smart Contracts are deployed on the blockchain using Hardhat, with deployment scripts included in the Smart Contract project.
+It's important to configure the necessary entries in the .env file, using the .env.example file as a guide.
+
+* **DEV_NODE_URL**: The URL of the blockchain where the Smart Contracts will be deployed.
+* **DEV_MNEMONIC**: The mnemonic providing the private key for deploying the Smart Contracts.
+* **DEV_INITIAL_ADDRESS_INDEX**: The index of the derived account from the mnemonic to be used for deployment.
+* **TOKEN_NAME**: The name of the token.
+* **TOKEN_SYMBOL**: The symbol of the token.
+* **CONTAINER_NAME**: The name of the container.
+
+After configuring these details in the .env file, you can execute the deployment scripts using Hardhat.
+Once deployed, you must enter the blockchain addresses of the Smart Contracts into the .env file of the Blockchain Connector.
+This ensures that the Blockchain Connector can send transactions to the appropriate smart contracts.
+
+=== Hyperledger Besu Blockchain
+
+A Hyperledger Besu network consists of multiple nodes operating in a decentralized manner on separate servers.
+A minimum of three nodes is required to initialize the Hyperledger Besu Blockchain.
+These nodes can be started on one server and expanded with additional nodes on different servers.
+Additionally, it is possible to run a Hyperledger Besu node within a Kubernetes environment.

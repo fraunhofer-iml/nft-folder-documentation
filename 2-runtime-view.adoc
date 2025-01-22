@@ -1,0 +1,39 @@
+[[chapter-runtime-view]]
+:docinfo: shared
+:toc: left
+:toclevels: 3
+:sectnums:
+:copyright: Apache-2.0
+:projectName: NFT-Folder
+
+= Runtime View
+
+This chapter visualizes the dynamic aspects of the {projectName}, focusing on how components interact and perform their roles at runtime.
+
+== General Component Communication
+
+Communication between the project-specific Blockchain Connector and the Blockchain Connector library is achieved through direct calls to the service layer functions.
+The Blockchain Connector library communicates with the blockchain via the ethers library, which uses an RPC endpoint for sending transactions and performing read operations.
+
+The following diagram illustrates the interactions between the components of the {projectName}:
+
+image::images/component-communication.svg[BC-Connector Communication]
+
+1. The *external project* using the {projectName} must develop a project-specific Blockchain Connector, customized to its unique use case and functionality.
+2. The *project-specific Blockchain Connector* sends requests to the service layer functions of the Blockchain Connector library.
+3. The *Blockchain Connector library* uses the ethers library to establish a connection to the blockchain, send transaction and read data.
+4. The *Blockchain* is accessed via JSON-RPC.
+
+== Use Cases and process information
+
+=== Use Case 1 - Mint Token
+
+image::images/mint-token.svg[Mint Token]
+
+=== Use Case 2 - Update Token
+
+image::images/update-token.svg[Update Token]
+
+=== Use Case 3 - Burn Token
+
+image::images/burn-token.svg[Burn Token]
