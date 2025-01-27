@@ -38,13 +38,13 @@ The Token Smart Contract is based on the ERC-721 standard, which governs the min
 :sectnums:
 
 <<<
-include::1-components.adoc[]
+include::1-components.adoc[Components]
 
 <<<
-include::2-runtime-view.adoc[]
+include::2-runtime-view.adoc[Runtime View]
 
 <<<
-include::3-deployment-view.adoc[]
+include::3-deployment-view.adoc[Deployment View]
 
 <<<
-include::4-tutorial.adoc[]
+include::4-tutorial.adoc[Tutorial]
