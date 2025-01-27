@@ -1,4 +1,4 @@
-[[chapter-building-block-view]]
+[[chapter-components]]
 :docinfo: shared
 :toc: left
 :toclevels: 3
