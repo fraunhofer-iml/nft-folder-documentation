@@ -33,9 +33,9 @@ The Token Smart Contract is based on the ERC-721 standard, which governs the min
 
 == Table of Contents
 
-* link::1-components.adoc[Component]
-* link::2-runtime-view.adoc[Runtime View]
-* link::3-deployment-view.adoc[Deployment View]
-* link::4-tutorial.adoc[Tutorial]
+* link:1-components.adoc[Component]
+* link:2-runtime-view.adoc[Runtime View]
+* link:3-deployment-view.adoc[Deployment View]
+* link:4-tutorial.adoc[Tutorial]
 
 <<<
