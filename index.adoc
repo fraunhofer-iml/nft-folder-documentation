@@ -1,4 +1,4 @@
-= Software Documentation for the {projectName}
+ifdef::env-github[]
 :doctype: book
 :toc: left
 :toclevels: 3
@@ -7,6 +7,8 @@
 :icons: font
 :copyright: Apache-2.0
 :projectName: NFT-Folder
+
+= Software Documentation for the NFT-Folder
 
 [[section-preface]]
 = Preface
