@@ -6,7 +6,9 @@
 :copyright: Apache-2.0
 :projectName: NFT-Folder
 
-= Motivation
+= Preface
+
+== Motivation
 
 An NFT, short for "Non-Fungible Token", refers to a unique digital token on the blockchain that usually represents a digital or physical asset. The blockchain enables secure and transparent tracking of ownership and the trading of the NFT.
 
@@ -14,7 +16,7 @@ The {projectName} enables the tokenization and secure management of assets as NF
 
 The Token Smart Contract is based on the ERC-721 standard, which governs the minting, ownership, and transfer of NFTs on an Ethereum-based blockchain. By extending this standard, industrial tokenization of assets is made possible, where additional essential information such as an identifier and fingerprint can be stored for each asset.
 
-= Main Authors
+== Main Authors
 
 [cols="1e,2e",options="header"]
 |===
