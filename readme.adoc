@@ -1,4 +1,4 @@
-= Software Documentation for the NFT-Folder
+= Software Documentation for the {projectName}
 :doctype: book
 :sectnumlevels: 5
 :leveloffset: 1
@@ -31,6 +31,7 @@ The Token Smart Contract is based on the ERC-721 standard, which governs the min
 |===
 
 = Table of Contents
+:sectnums:
 
 * link:1-components.adoc[Component]
 * link:2-runtime-view.adoc[Runtime View]
