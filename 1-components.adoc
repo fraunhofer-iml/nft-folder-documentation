@@ -1,0 +1,266 @@
+[[chapter-components]]
+:docinfo: shared
+:toc: left
+:toclevels: 3
+:sectnums:
+:copyright: Apache-2.0
+:projectName: NFT-Folder
+
+= Components of the {projectName}
+
+This chapter describes the individual components of the {projectName} and their functions.
+
+== Overview
+
+The {projectName} includes three Smart Contracts — Container, Segment, and Token — and a NestJS library called the Blockchain Connector.
+These smart contracts are designed to operate on an Ethereum-based blockchain.
+The Blockchain Connector is tailored to execute their functions, simplifying the integration of web applications with the blockchain by seamlessly integrating into project-specific microservices.
+
+**Components Overview**:
+
+- **Container Smart Contract**: Acts as the central hub for an organization, managing its Segments and Tokens. Each Container is owned by a single organization.
+- **Segment Smart Contract**: Allows for the logical division of NFTs within a Container, linking each NFT to a specific Segment.
+- **Token Smart Contract**: Adheres to the ERC-721 standard for NFTs on Ethereum, enabling the tokenization of assets with additional metadata, such as identifiers and fingerprints.
+- **Blockchain Connector Library**: A NestJS module that bridges applications and smart contracts. It can be integrated into other NestJS projects as an npm package, offering modules for straightforward import and interaction with smart contracts. The Blockchain Connector can also be used as a standalone service, providing flexible deployment options.
+
+image::images/components-whitebox.svg[{projectName} components]
+
+There are the following components with its responsibilities:
+
+[cols="3",options="header"]
+|===
+|Name
+|Status
+|Responsibility / Description
+
+|Project-specific Blockchain Connector Service
+|Custom Development
+|Specifically developed for each project using the {projectName} to facilitate decoupling by transforming project-specific data into data compatible with the Blockchain Connector.
+
+|Blockchain Connector Library
+|Part of the {projectName}
+|Offers functions for the execution of smart contract functions on the blockchain.
+
+|Container, Segment and Token Smart Contracts
+|Part of the {projectName}
+|Provide the functions for the tokenization and storage of Real-World Assets.
+
+|Ethereum-based Blockchain
+|Blockchain Platform
+|Serves as a decentralized ledger storing information on Tokens, Segments, and Containers.
+|===
+
+== Project-specific Blockchain Connector
+
+The Project-specific Blockchain Connector is a custom-developed web service that bridges a project's logic with the Blockchain Connector library.
+Requests from this connector are sent to the Blockchain Connector library, which then forwards them to the corresponding smart contract on the blockchain.
+If a project only intends to manage tokens without organizing them into segments and containers, this project-specific Blockchain Connector will implement only the necessary token management functions.
+
+== Blockchain Connector Library
+
+=== Overview
+The Blockchain Connector library, available as an npm package, provides a suite of functions that can be integrated into a project-specific Blockchain Connector.
+Built with NestJS and TypeScript, it facilitates blockchain access and supports the following functionalities:
+
+**Segment Management**
+
+* Create a Segment
+* Read Segments
+* Add a Token to a Segment
+* Remove a Token from a Segment
+
+**Token Management**
+
+* Mint a Token
+* Read a Token
+* Retrieve all Tokens of a Segment
+* Update a Token
+* Burn a Token
+* Transfer a Token
+* Retrieve all previous transfer events
+* Establish hierarchical relationships between tokens
+* Retrieve a token's parents or children in the hierarchy
+
+**Data Integrity**
+
+* Calculate a hash for a file or string
+* Verify a hash for a file or string
+
+This library is designed to be integrated into a project-specific Blockchain Connector, enabling seamless interaction with the blockchain.
+
+=== Details
+
+The Blockchain Connector is a single npm library designed for integration into another Node.js project.
+While it is primarily intended to be used as a library by sending requests to the service layer, it can also be used as a standalone microservice.
+In this case, the endpoints must be activated through the .env file by setting BCC_ENDPOINTS_ENABLED=true.
+Activating the predefined endpoints facilitates RESTful API communication using JSON for data transfer.
+
+|===
+|Component Collection |Component |Description
+
+|**Data Integrity Management**
+|
+|
+
+|
+|Data Integrity Controller
+
+(can be activated or deactivated as needed)
+|Provides REST endpoints to hash strings or documents.
+
+|
+|Data Integrity Service
+|Offers functions for hashing strings or documents.
+
+|**Segment Management**
+|
+|
+
+|
+|Segment Controller
+
+(can be activated or deactivated as needed)
+|Provides REST endpoints for communication with the Blockchain Connector. Invokes Segment Service to execute Smart Contract functions. More details in the Swagger API documentation.
+
+|
+|Segment Service
+|Utilizes Smart Contracts to manage Segments, relying on the Blockchain Service to create and send transaction objects.
+
+
+|**Token Management**
+|
+|
+
+|
+|Token Controller
+
+(can be activated or deactivated as needed)
+|Provides REST endpoints for communication with the Blockchain Connector. Invokes Token Service to execute Smart Contract functions. More details in the Swagger API documentation.
+|
+|Token Service
+|Uses Smart Contracts to manage Tokens, relying on the Blockchain Service to create and send transaction objects.
+
+|
+|Event Service
+|Retrieves blockchain events related to a specific Token.
+
+|**Blockchain Service**
+|
+|Implements core functionalities for blockchain interaction, such as transaction handling. Utilized by other services to create and send transaction objects.
+
+|**Ethers Service**
+|
+|Establishes a blockchain connection for use by the Blockchain Service.
+
+|===
+
+=== Error Handling
+
+The Blockchain Connector features a standardized error handling mechanism that provides descriptive error messages.
+This system is consistently applied across all controllers within the Blockchain Connector.
+Additionally, custom errors thrown by the smart contracts are displayed through the Blockchain Connector, ensuring clear communication of issues.
+
+== Smart Contracts
+
+=== Overview
+
+The Smart Contracts within the {projectName} provide essential functions for storing and retrieving data on the blockchain:
+
+**Container**
+
+* Create a Segment
+* Read Segments associated with the Container
+
+**Segment**
+
+* Add a Token to a Segment
+* Remove a Token from a Segment
+
+**Token**
+
+* Mint a Token
+* Read a Token
+* Update a Token
+* Transfer a Token
+* Burn a Token
+
+**TokenDataStorage**
+
+* Set and read additional data to a Token
+* Set and read the Hash and URI of the asset to a Token
+* Set and read the Hash and URI of the metadata to a Token
+
+**TokenExtensionBase**
+
+* Provides frequently used functions
+
+**TokenHierarchy**
+
+* Add a Token to a hierarchy
+* Read parent or child Tokens of a Token
+* Confirm a Token as child Token
+
+**TokenRemoteId**
+
+* Set the remote ID to a Token
+* Return IDs of Tokens with a specific remote ID
+
+**TokenSegmentAllocation**
+
+* Add a Token to a Segment
+* Read the Segment of a Token
+* Remove a Token from a Segment
+
+=== Details
+
+The Smart Contracts within the {projectName} encapsulate the core functionalities of the system, managing Containers, Segments, and Tokens.
+
+|===
+|Smart Contract|Description
+
+|Container
+|Each organization using the {projectName} may deploy a Container contract instance on the blockchain. Such an instance creates new Segments, automatically associating them with the Container, and retrieves all Segments it owns.
+
+|Segment
+|Deployed via the Container contract, the Segment contract is tied to the organization owning the Container. It manages the addition and removal of Tokens from the Segment.
+
+|Token
+|Implements the ERC-721 standard, providing functions for the entire lifecycle of NFTs. It includes additional features through four extension contracts.
+
+|TokenDataStorage
+|Extends the Token contract by allowing the definition and retrieval of the hash and URI of an asset and its metadata.
+
+|TokenRemoteId
+|Extends the Token contract by managing a specific identifier for an asset, uniquely identifying it within an external system, such as a database.
+
+|TokenSegmentAllocation
+|Extends the Token contract by allowing Tokens to be assigned to or removed from Segments. Tokens can belong to multiple Segments as needed.
+
+|TokenHierarchy
+|Extends the Token contract, providing functions to designate Tokens as the root of a new hierarchy or append them as leaves in an existing hierarchy.
+|===
+
+=== Error Handling
+
+Custom errors are utilized within the Smart Contracts to validate inputs.
+If an input is incorrect, a corresponding custom error is generated, ensuring accurate error reporting.
+
+=== Testability
+Smart Contract tests are named identically to their respective Smart Contract files, with the addition of a .test suffix.
+These test files are designed to verify the behavior and functionality of the Smart Contracts, ensuring their reliability.
+
+=== Events
+
+Events are emitted by certain smart contract functions on the blockchain.
+They serve as a historical record, providing insights into transactions and are used across all Smart Contracts within the {projectName}.
+
+The Blockchain Connector reads these events to gather metadata related to tokens.
+For example, it can access all events associated with a specific token to extract information from the initial event, such as the token's creation timestamp.
+Additionally, the Blockchain Connector can retrieve all past transfers of a token, offering comprehensive historical data.
+
+== Ethereum-Based Blockchain
+
+While the smart contracts can be deployed on any Ethereum-based blockchain, we've tested them on the Hyperledger Besu Blockchain.
+
+The Hyperledger Besu Blockchain is an enterprise-focused blockchain platform built on the Ethereum protocol.
+It is designed to deliver high throughput and enhanced performance for businesses and financial institutions.

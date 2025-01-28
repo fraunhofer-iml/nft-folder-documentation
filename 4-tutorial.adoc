@@ -1,0 +1,206 @@
+[[chapter-tutorial]]
+:docinfo: shared
+:toc: left
+:toclevels: 3
+:sectnums:
+:copyright: Apache-2.0
+:projectName: NFT-Folder
+
+= Tutorial
+
+This chapter provides a detailed, step-by-step guide for setting up the components of the {projectName}.
+It is designed to ensure a smooth installation process, even for users with limited prior experience.
+By carefully following the instructions, you will have the application running quickly and reliably.
+
+Proper preparation of your environment is crucial for a successful installation and use of the {projectName}.
+The following sections outline all necessary prerequisites, installation steps, and configuration instructions.
+The commands in this guide have been tested on Ubuntu 24.04.1 LTS, but adjustments may be required for other operating systems.
+
+For simplicity, this tutorial will start the Blockchain Connector as a microservice rather than integrating it into an existing application as a library.
+
+== Install the Tools
+
+This section explains how to install the required tools to ensure a smooth setup process.
+
+=== Git
+
+Git is essential for version control and for cloning the required repositories from GitHub.
+
+1. *Visit* https://git-scm.com/downloads[Git's official website].
+2. *Follow* the installation instructions for your operating system.
+3. *Verify* the installation with the following command:
+[source,shell]
+git --version
+
+=== Docker
+
+Docker is required to manage the blockchain.
+
+1. *Visit* https://docs.docker.com/get-docker/[Docker's official installation guide].
+2. *Follow* the installation instructions for your operating system.
+3. *Verify* the installation with following command:
+[source,shell]
+docker --version
+
+=== Node.js
+
+Node.js is required to manage dependencies and execute application.
+
+1. *Visit* https://nodejs.org/en/download/[Node.js's official website].
+2. *Follow* the installation instructions for your operating system.
+3. *Verify* the installation with the following commands:
+[source,shell]
+node --version
+npm --version
+
+== Clone the Repositories
+
+This section provides instructions for downloading the components of the {projectName} from GitHub.
+
+All repositories are available under the organization https://github.com/fraunhofer-iml[Fraunhofer IML] on GitHub.
+For this tutorial wee need the following three repositories: https://github.com/fraunhofer-iml/nft-folder-smart-contracts[nft-folder-smart-contracts], https://github.com/fraunhofer-iml/nft-folder-blockchain-connector[nft-folder-blockchain-connector] and https://github.com/fraunhofer-iml/nft-folder-documentation[nft-folder-documentation].
+The `nft-folder-documentation` project is where you are currently reading this documentation.
+The `nft-folder-smart-contracts`project contains the smart contracts, and the `nft-folder-blockchain-connector` project contains the blockchain connector.
+
+Since a blockchain network is required to use the {projectName}, we recommend using the https://github.com/fraunhofer-iml/hyperledger-besu-network-configuration[hyperledger-besu-network-configuration] repository from the Fraunhofer GitHub organization instead of the Hardhat network due to custom error issues.
+
+1. *Clone* the `nft-folder-smart-contracts` repository to your local system:
+[source,shell]
+git clone git@github.com:fraunhofer-iml/nft-folder-smart-contracts.git
+
+2. *Clone* the `nft-folder-blockchain-connector` repository to your local system:
+[source,shell]
+git clone git@github.com:fraunhofer-iml/nft-folder-blockchain-connector.git
+
+3. *Clone* the `hyperledger-besu-network-configuration` repository to your local system:
+[source,shell]
+git clone git@github.com:fraunhofer-iml/hyperledger-besu-network-configuration.git
+
+== Set up all Components
+
+=== Start the Blockchain Network
+
+The blockchain network is started using Docker Compose.
+The `docker-compose.yml` file defines four services, one for each node: `alice`, `bob`, `carol`, and `dan`.
+
+1. *Navigate* to the `hyperledger-besu-network-configuration` directory:
+[source,shell]
+cd hyperledger-besu-network-configuration
+
+2. *Build* the Docker images:
+[source,shell]
+docker compose build
+
+3. *Start* the Docker containers:
+[source,shell]
+docker compose up
+
+== Deploy the Smart Contracts
+
+The smart contracts are deployed to the blockchain using Hardhat.
+This development environment helps developers manage the lifecycle of their smart contracts and provides a comprehensive environment for compiling, testing and deploying them.
+
+While the blockchain network is running, follow these steps:
+
+1. *Navigate* to the `smart-contracts` directory:
+[source,shell]
+cd smart-contracts
+
+2. *Copy* the `.env.example` file to `.env`:
+[source,shell]
+cp .env.example .env
+
+3. *Install* the dependencies:
+[source,shell]
+npm install
+
+4. *Compile* the smart contracts:
+[source,shell]
+npm run compile
+
+5. *Deploy* the Container smart contract to the blockchain network:
+[source,shell]
+npm run container-deploy-dev
+
+6. *Deploy* the Token smart contract to the blockchain network:
+[source,shell]
+npm run token-deploy-dev
+
+7. *Copy* the addresses of the deployed smart contracts from the terminal output and save them for the next section.
+
+=== Start the Blockchain Connector
+
+To start the blockchain connector, perform the following steps:
+
+1. *Navigate* to the `blockchain-connector` directory:
+[source,shell]
+cd ../blockchain-connector
+
+2. *Rename* the `.env.example` file to `.env`:
+[source,shell]
+mv .env.example .env
+
+3. *Ensure* that the `BCC_CONTAINER_ADDRESS` and `BCC_TOKEN_ADDRESS` values in the `.env` file are set to the saved addresses of the deployed smart contracts from the previous section.
+
+4. *Install* the dependencies:
+[source,shell]
+npm install
+
+5. *Start* the blockchain connector:
+[source,shell]
+npm run start
+
+== Test Communication between the Blockchain Connector and the Smart Contracts
+
+To verify that the blockchain connector is successfully communicating with the smart contracts, follow these steps. (Ensure that the `BCC_ENDPOINTS_ENABLED` flag in the `.env` file is set to true.)
+
+=== Mint a Token
+
+1. *Open* a web browser and navigate to `http://localhost:4000/api`
+2. *Click* on the `POST /tokens` endpoint to create a new token
+3. *Select* `false` for the parameter `appendToHierarchy`
+4. *Enter* the following JSON object in the request body:
+[source,json]
+{
+    "remoteId": "dummy-1337",
+    "asset": {
+        "uri": "https://example.com/dummy-1337/image.jpg",
+        "hash": "abcdef1234567890"
+    },
+    "metadata": {
+        "uri": "https://example.com/dummy-1337/metadata.json",
+        "hash": "1234567890abcdef"
+    },
+    "additionalData": "Lorem ipsum dolor sit amet",
+        "parentIds": [
+    ]
+}
+5. *Click* on the `Try it out` button to send the request
+
+=== Fetch a Token
+
+1. *Click* on the `GET /tokens` endpoint to retrieve the token
+2. *Enter* the following value in the `remoteId` field: `dummy-1337`
+3. *Click* on the `Try it out` button to send the request
+4. *Verify* that the response contains a JSON object similar to the following:
+[source,json]
+[
+    {
+        "remoteId": "dummy-1337",
+        "asset": {
+            "uri": "https://example.com/dummy-1337/image.jpg",
+            "hash": "abcdef1234567890"
+        },
+        "metadata": {
+            "uri": "https://example.com/dummy-1337/metadata.json",
+            "hash": "1234567890abcdef"
+        },
+        "additionalData": "Lorem ipsum dolor sit amet",
+        "ownerAddress": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        "minterAddress": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        "createdOn": "2025-01-01T00:13:37.000Z",
+        "lastUpdatedOn": "2025-01-01T00:13:37.000Z",
+        "tokenId": "0",
+        "tokenAddress": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+    }
+]

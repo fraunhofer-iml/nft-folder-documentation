@@ -1,0 +1,40 @@
+= Software Documentation for the {projectName}
+:doctype: book
+:sectnumlevels: 5
+:leveloffset: 1
+:icons: font
+:copyright: Apache-2.0
+:projectName: NFT-Folder
+
+= Preface
+
+== Motivation
+
+An NFT, short for "Non-Fungible Token", refers to a unique digital token on the blockchain that usually represents a digital or physical asset. The blockchain enables secure and transparent tracking of ownership and the trading of the NFT.
+
+The {projectName} enables the tokenization and secure management of assets as NFTs on the blockchain and ensures traceable documentation. It consists of a Blockchain Connector and three Smart Contracts: Token, Segment, and Container. The Blockchain Connector acts as an interface between the application and the blockchain. The Token Smart Contract is responsible for the minting and burning of NFTs, while Segment and Container efficiently structure the NFTs.
+
+The Token Smart Contract is based on the ERC-721 standard, which governs the minting, ownership, and transfer of NFTs on an Ethereum-based blockchain. By extending this standard, industrial tokenization of assets is made possible, where additional essential information such as an identifier and fingerprint can be stored for each asset.
+
+== Main Authors
+
+[cols="1e,2e",options="header"]
+|===
+|Name
+|E-Mail
+
+|Lukas Grieger
+|lukas.grieger@iml.fraunhofer.de
+
+|Michael Pichura
+|michael.pichura@iml.fraunhofer.de
+|===
+
+= Table of Contents
+
+* link:1-components.adoc[Component]
+* link:2-runtime-view.adoc[Runtime View]
+* link:3-deployment-view.adoc[Deployment View]
+* link:4-tutorial.adoc[Tutorial]
+
+<<<
